@@ -1,0 +1,73 @@
+<html>
+<head>
+<title>DarbBot</title>
+<style>
+  #textarea {width: 600px; height:200px;}
+</style>
+<script>
+var matches = [[/.*hello.*/i, "Hello!"],
+               [/.*coming.*/i, "Just like yo momma, OOOHHH!"],
+               [/.*sam.*/i, "Sam sucks."],
+               [/^[^a-z]*[A-Z]+[^a-z]*$/, "WHY ARE WE SHOUTING?"]];
+
+var randoms = ["Scratching balls.",
+               "<Name> is a potato."];
+
+var names = ["Sam",
+             "Ben",
+             "Anders",
+             "Tim"];
+
+
+function getRandomName() {
+  var randomIndex = Math.trunc(Math.random() * names.length);
+  return names[randomIndex];
+}
+
+function checkRegex(text) {
+  var arrayLen = matches.length;
+  var responses = [];
+  for (var i = 0; i < arrayLen; i++) {
+    if (text.match(matches[i][0])) {
+      responses.push(matches[i][1]);
+    }
+  }
+  document.getElementById("textarea").value += "DarbBot> ";
+  var text;
+  if (responses.length > 0) {
+    var randomIndex = Math.trunc(Math.random() * responses.length);
+    text = responses[randomIndex];
+  } else {
+    var randomIndex = Math.trunc(Math.random() * randoms.length);
+    text = randoms[randomIndex];
+  }
+  text = text.replace("<Name>", getRandomName());
+  document.getElementById("textarea").value += text + "\n";
+}
+
+function addText(event) {
+  if (document.getElementById("myText").value == "") {
+    return;
+  }
+  document.getElementById("textarea").value += "You> " + document.getElementById("myText").value + "\n";
+  checkRegex(document.getElementById("myText").value);
+  document.getElementById("myText").value = "";
+
+  var textarea = document.getElementById('textarea');
+  textarea.scrollTop = textarea.scrollHeight;
+}
+</script>
+</head>
+<body>
+<h2>Welcome to DarbBot</h2>
+<div><textarea id="textarea"></textarea></div>
+<span><input id="myText"/><button onclick="addText()">Send</button></span>
+<script>
+document.getElementById("myText").addEventListener("keydown", function (e) {
+    if (e.keyCode === 13) {  //checks whether the pressed key is "Enter"
+        addText();
+    }
+});
+</script>
+</body>
+</html>
